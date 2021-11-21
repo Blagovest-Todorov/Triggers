@@ -115,3 +115,36 @@ Triggers can be written for the following purposes −
 •	Imposing security authorizations
 •	Preventing invalid transactions
 /
+
+TASK SoftUni : Delete Employees /Trigers
+Create a table Deleted_Employees(EmployeeId PK, FirstName, LastName, MiddleName, JobTitle, DepartmentId, Salary) that will hold information about fired (deleted) employees from the Employees table. Add a trigger to Employees table that inserts the corresponding information about the deleted records in Deleted_Employees.
+
+Solution :
+CREATE TABLE Deleted_Employees(
+EmployeeId INT NOT NULL PRIMARY KEY, 
+FirstName VARCHAR(30),
+LastName VARCHAR(30),
+MiddleName VARCHAR(30),
+JobTitle VARCHAR(30), 
+DepartmentId INT, 
+Salary DECIMAL(15,2)
+)
+GO
+
+CREATE TRIGGER tr_FiredEmployees
+ON Employees
+INSTEAD OF DELETE
+
+AS
+  INSERT INTO Deleted_Employees -- this is the new deleted table containing info
+  SELECT EmployeeId, FirstName, LastName, MiddleName, JobTitle, DepartmentId, Salary
+  FROM  DELETED 
+  -- inserted and deletesd are middle tables of all changes of table Employees !!!
+  -- the info comes from Employees then goes to DELETED then GOES to Deleted_Employees
+
+  DELETE FROM Employees WHERE EmployeeID = 1
+
+  SELECT * FROM Deleted_Employees
+  SELECT * FROM Employees WHERE EmployeeID = 1
+
+
